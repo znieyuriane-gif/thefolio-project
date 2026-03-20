@@ -13,7 +13,8 @@ const CreatePostPage = () => {
   const [error,        setError]        = useState('');
   const [loading,      setLoading]      = useState(false);
 
-  const { user }  = useAuth();
+  const { user } = useAuth(); // eslint-disable-line no-unused-vars
+
   const navigate  = useNavigate();
 
   // Handle image selection + show preview
@@ -39,7 +40,9 @@ const CreatePostPage = () => {
     fd.append('title', title);
     fd.append('body', body);
     if (image) fd.append('image', image);
-
+    if (user) {
+      fd.append('author', user.id);   // or user._id / user.username depending on your backend
+    }
     try {
       const { data } = await API.post('/posts', fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -64,6 +67,7 @@ const CreatePostPage = () => {
         <section className="card-warm" style={{ marginBottom: '20px' }}>
           <h2 style={{ fontFamily: "Georgia, serif" }}>Write a New Post</h2>
           <p>Share your thoughts, stories, or recommendations with the community.</p>
+          {user && <p>Posting as <strong>{user.name}</strong></p>}
         </section>
 
         <section className="card-form">

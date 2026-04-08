@@ -39,13 +39,13 @@ function Header() {
               <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}>
                 About
               </NavLink>
+              <NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}>
+                Contact
+              </NavLink>
 
               {/* GUEST */}
               {!user && (
                 <>
-                  <NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}>
-                    Contact
-                  </NavLink>
                   <NavLink to="/register" className={({ isActive }) => (isActive ? "active" : "")}>
                     Register
                   </NavLink>
@@ -58,8 +58,8 @@ function Header() {
               {/* MEMBER */}
               {user && user.role === "member" && (
                 <>
-                  <NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}>
-                    Contact
+                  <NavLink to="/posts" className={({ isActive }) => (isActive ? "active" : "")}>
+                    Posts
                   </NavLink>
                   <NavLink to="/create-post" className={({ isActive }) => (isActive ? "active" : "")}>
                     Write Post
@@ -76,8 +76,8 @@ function Header() {
               {/* ADMIN */}
               {user && user.role === "admin" && (
                 <>
-                  <NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}>
-                    Contact
+                  <NavLink to="/posts" className={({ isActive }) => (isActive ? "active" : "")}>
+                    Posts
                   </NavLink>
                   <NavLink to="/create-post" className={({ isActive }) => (isActive ? "active" : "")}>
                     Write Post
@@ -102,18 +102,28 @@ function Header() {
 
       {/* Logout Confirmation Modal */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to logout?</p>
-            <div className="modal-buttons">
-              <button className="modal-btn-confirm" onClick={handleConfirmLogout}>
+        <div className="logout-overlay" onClick={handleCancelLogout}>
+          <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="logout-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M16 17L21 12L16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h3 className="logout-title">Leaving so soon?</h3>
+            <p className="logout-subtitle">
+              Hi <strong>{user?.name}</strong>, are you sure you want to logout?
+            </p>
+            <div className="logout-actions">
+              <button className="logout-confirm-btn" onClick={handleConfirmLogout}>
                 Yes, Logout
               </button>
-              <button className="modal-btn-cancel" onClick={handleCancelLogout}>
-                Cancel
+              <button className="logout-cancel-btn" onClick={handleCancelLogout}>
+                Stay
               </button>
             </div>
+            <button className="logout-close" onClick={handleCancelLogout}>✕</button>
           </div>
         </div>
       )}

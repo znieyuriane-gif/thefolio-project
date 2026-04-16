@@ -19,8 +19,9 @@ connectDB();
 
 // ── Global Middleware ────────────────────────────────────────────────
 const allowedOrigins = [
-  'http://localhost:3000',               // dev
-  'https://thefolio-project.vercel.app', // production (Vercel)
+  'http://localhost:3000',
+  'https://thefolio-project.vercel.app',
+  'https://thefolio-project-git-main-znieyuriane-gifs-projects.vercel.app', // <-- add this
 ];
 
 app.use(cors({
@@ -48,7 +49,7 @@ app.use('/api/contact',  contactRoutes); // <-- FIXED usage
 
 // ── Health check ────────────────────────────────────────────────────
 app.get('/', (req, res) => {
-  res.json({ message: 'The folio API is LIve✔' });
+  res.json({ message: 'The folio API is Live ✔' });
 });
 
 // ── Start Server ────────────────────────────────────────────────────

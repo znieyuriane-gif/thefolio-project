@@ -79,7 +79,7 @@ router.get('/contacts', async (req, res) => {
   }
 });
 
-// OPTIONAL: Mark a contact message as "read" or "resolved"
+// PUT /api/admin/contacts/:id/status — Mark message as read/resolved
 router.put('/contacts/:id/status', async (req, res) => {
   try {
     const contact = await Contact.findById(req.params.id);

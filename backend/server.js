@@ -28,13 +28,12 @@ app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true); // allow Postman/servers
     if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
-      return callback(null, origin); // ibalik ang eksaktong origin
+      return callback(null, origin); // return the actual origin
     }
     return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
 }));
-
 
 app.use(express.json());
 

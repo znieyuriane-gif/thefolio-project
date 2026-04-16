@@ -1,9 +1,6 @@
-// routes/contact.js
-import express from "express";
+const express = require("express");
+const Contact = require("../models/Contact"); // <-- Correct model import
 const router = express.Router();
-
-// Example MongoDB model
-import Contact from "../pages/ContactPage.js";
 
 router.post("/", async (req, res) => {
   const { name, email, message } = req.body;
@@ -15,4 +12,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

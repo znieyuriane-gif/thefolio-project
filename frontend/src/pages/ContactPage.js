@@ -59,6 +59,7 @@ function ContactPage() {
         }
       } catch (error) {
         alert("Error sending message.");
+        console.error(error);
       }
     }
   }
@@ -145,7 +146,7 @@ function ContactPage() {
               </td>
               <td>
                 <p>
-                  <span>W</span>EBTOON is a free digital platform where you can read millions of comics, manga, and manhwa episodes across diverse genres like romance, action, thriller, and fantasy. It’s one of the world’s largest webcomic communities, with both fans and creators contributing stories.
+                  <span>W</span>EBTOON is a free digital platform where you can read millions of comics, manga, and manhwa episodes across diverse genres like romance, action, thriller, and fantasy. It's one of the world's largest webcomic communities, with both fans and creators contributing stories.
                 </p>
               </td>
             </tr>

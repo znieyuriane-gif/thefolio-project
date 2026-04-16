@@ -1,11 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://thefolio-project-nrvr.onrender.com/api"
-      : "http://localhost:5000/api",
-  withCredentials: true,
+  baseURL: "https://thefolio-project-nrvr.onrender.com/api",
+  withCredentials: true
 });
 
 // Attach token to every request automatically
@@ -16,3 +13,4 @@ API.interceptors.request.use((config) => {
 });
 
 export default API;
+

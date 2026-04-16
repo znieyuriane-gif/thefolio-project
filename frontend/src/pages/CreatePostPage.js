@@ -13,11 +13,9 @@ const CreatePostPage = () => {
   const [error,        setError]        = useState('');
   const [loading,      setLoading]      = useState(false);
 
-  const { user } = useAuth(); // eslint-disable-line no-unused-vars
-
+  const { user } = useAuth();
   const navigate  = useNavigate();
 
-  // Handle image selection + show preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -25,7 +23,6 @@ const CreatePostPage = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  // Remove selected image
   const handleRemoveImage = () => {
     setImage(null);
     setImagePreview(null);
@@ -41,7 +38,7 @@ const CreatePostPage = () => {
     fd.append('body', body);
     if (image) fd.append('image', image);
     if (user) {
-      fd.append('author', user.id);   // or user._id / user.username depending on your backend
+      fd.append('author', user._id);
     }
     try {
       const { data } = await API.post('/posts', fd, {
@@ -75,7 +72,6 @@ const CreatePostPage = () => {
 
           <form className="form-inner" style={{ paddingLeft: 0 }} onSubmit={handleSubmit}>
 
-            {/* Title */}
             <div className="form-field">
               <label htmlFor="title">Post Title:</label>
               <input
@@ -89,7 +85,6 @@ const CreatePostPage = () => {
               />
             </div>
 
-            {/* Body */}
             <div className="form-field">
               <label htmlFor="body">Post Content:</label>
               <textarea
@@ -104,11 +99,9 @@ const CreatePostPage = () => {
               />
             </div>
 
-            {/* Image upload — ALL users (members + admins) */}
             <div className="form-field">
               <label>Cover Image (optional):</label>
 
-              {/* Image preview */}
               {imagePreview && (
                 <div className="create-post-preview">
                   <img src={imagePreview} alt="Preview" className="create-post-preview-img" />
@@ -118,7 +111,6 @@ const CreatePostPage = () => {
                 </div>
               )}
 
-              {/* Upload button */}
               {!imagePreview && (
                 <label className="create-post-upload-label">
                   📎 Choose Image

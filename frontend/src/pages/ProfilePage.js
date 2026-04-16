@@ -15,14 +15,12 @@ const ProfilePage = () => {
   const [curPw, setCurPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [msgType, setMsgType] = useState("success"); // "success" | "error"
+  const [msgType, setMsgType] = useState("success");
 
-  // Redirect guests — only MEMBER and ADMIN can access
   useEffect(() => {
     if (!user) navigate("/login");
   }, [user, navigate]);
 
-  // MEMBER & ADMIN: update name, bio, profile picture
   const handleProfile = async (e) => {
     e.preventDefault();
     setMsg("");
@@ -41,7 +39,6 @@ const ProfilePage = () => {
     }
   };
 
-  // MEMBER & ADMIN: change password
   const handlePassword = async (e) => {
     e.preventDefault();
     setMsg("");
@@ -60,8 +57,10 @@ const ProfilePage = () => {
     }
   };
 
+  const STORAGE_URL = process.env.REACT_APP_API_URL.replace("/api", "");
+
   const picSrc = user?.profilePic
-    ? `http://localhost:5000/uploads/${user.profilePic}`
+    ? `${STORAGE_URL}/uploads/${user.profilePic}`
     : "/default-avatar.png";
 
   return (
@@ -70,7 +69,6 @@ const ProfilePage = () => {
       <div className="profile-page">
         <h2>My Profile</h2>
 
-        {/* Role badge */}
         <div style={{ textAlign: "center", marginBottom: "16px" }}>
           <span className={`status-badge ${user?.role === "admin" ? "published" : "active"}`}
             style={{ fontSize: "13px", padding: "4px 14px" }}>
@@ -87,7 +85,6 @@ const ProfilePage = () => {
           </p>
         )}
 
-        {/* MEMBER & ADMIN: edit profile */}
         <form onSubmit={handleProfile}>
           <h3>Edit Profile</h3>
           <label>Display Name:</label>
@@ -112,7 +109,6 @@ const ProfilePage = () => {
           <button type="submit">Save Profile</button>
         </form>
 
-        {/* MEMBER & ADMIN: change password */}
         <form onSubmit={handlePassword}>
           <h3>Change Password</h3>
           <input

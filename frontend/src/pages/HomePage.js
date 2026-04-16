@@ -43,7 +43,7 @@ const HomePage = () => {
       <Header />
       <hr className="hori" />
 
-      {/* Banner images (static imports) */}
+      {/* Banner images */}
       <div className="images">
         <img src={m1} alt="Manga 1" />
         <img src={m2} alt="Manga 2" />
@@ -56,8 +56,7 @@ const HomePage = () => {
         <p>
           <span>W</span>elcome to my webpage, this page will introduce what saved
           my life and these are what I call "The Three Ms" which means Manga,
-          Manhwa, and Manhua. These are something that I will be keeping and
-          doing my entire life.
+          Manhwa, and Manhua.
         </p>
       </section>
 
@@ -76,7 +75,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Three Ms cards (static imports) */}
+      {/* Three Ms cards */}
       <div id="mmm-flex">
         <div className="the-mmm">
           <img src={potManga} className="img-border" alt="The Prince of Tennis" />
@@ -119,7 +118,7 @@ const HomePage = () => {
 
       <hr className="hori" />
 
-      {/* ── Latest Posts ── */}
+      {/* Latest Posts */}
       <div className="home-page">
         <div className="posts-header">
           <h2>Latest Posts</h2>

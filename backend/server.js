@@ -19,22 +19,22 @@ connectDB();
 
 // ── Global Middleware ────────────────────────────────────────────────
 const allowedOrigins = [
-  'http://localhost:3000',
-  'https://thefolio-project.vercel.app',
-  'https://thefolio-project-git-main-znieyuriane-gifs-projects.vercel.app'
+  "http://localhost:3000",
+  "https://thefolio-project.vercel.app",
+  "https://thefolio-project-git-main-znieyuriane-gifs-projects.vercel.app"
 ];
 
-// Explicit CORS setup for withCredentials:true
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin); // return the actual origin, not true
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    if (!origin) return callback(null, true); // allow Postman/servers
+    if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+      return callback(null, origin); // ibalik ang eksaktong origin
     }
+    return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
 }));
+
 
 app.use(express.json());
 

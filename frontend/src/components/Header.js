@@ -43,6 +43,9 @@ function Header() {
               {/* GUEST */}
               {!user && (
                 <>
+                  <NavLink to="/posts/:id" className={({ isActive }) => (isActive ? "active" : "")}>
+                    Posts
+                  </NavLink>
                   <NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}>
                     Contact
                   </NavLink>
@@ -64,6 +67,9 @@ function Header() {
                   <NavLink to="/create-post" className={({ isActive }) => (isActive ? "active" : "")}>
                     Write Post
                   </NavLink>
+                  <NavLink to="/posts/:id" className={({ isActive }) => (isActive ? "active" : "")}>
+                    Posts
+                  </NavLink>
                   <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")}>
                     Profile
                   </NavLink>
@@ -76,11 +82,11 @@ function Header() {
               {/* ADMIN */}
               {user && user.role === "admin" && (
                 <>
-                  <NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}>
-                    Contact
-                  </NavLink>
                   <NavLink to="/create-post" className={({ isActive }) => (isActive ? "active" : "")}>
                     Write Post
+                  </NavLink>
+                  <NavLink to="/posts/:id" className={({ isActive }) => (isActive ? "active" : "")}>
+                    Posts
                   </NavLink>
                   <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")}>
                     Profile

@@ -1,31 +1,56 @@
-// backend/server.js
-require('dotenv').config(); // Load .env variables FIRST
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+require('dotenv').config(); // ← Must be FIRST
+
+const express   = require('express');
+const cors      = require('cors');
+const path      = require('path');
 const connectDB = require('./config/db');
-// Import routes (you will create these files in the next steps)
-const authRoutes = require('./routes/auth.routes');
-const postRoutes = require('./routes/post.routes');
+
+// Route files
+const authRoutes    = require('./routes/auth.routes');
+const postRoutes    = require('./routes/post.routes');
 const commentRoutes = require('./routes/comment.routes');
-const adminRoutes = require('./routes/admin.routes');
+const adminRoutes   = require('./routes/admin.routes');
+
 const app = express();
-connectDB(); // Connect to MongoDB
-// ── Middleware ─────────────────────────────────────────────────
-// Allow React (port 3000) to call this server
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-// Parse incoming JSON request bodies
+
+// ── Connect to MongoDB ───────────────────────────────────────────────
+connectDB();
+
+// ── Global Middleware ────────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:3000',              // dev
+  'https://thefolio-1ttk.vercel.app'    // production (Vercel)
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
-// Serve uploaded image files as public URLs
-// e.g. http://localhost:5000/uploads/my-image.jpg
+
+// Serve uploaded image files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// ── Routes ────────────────────────────────────────────────────
-app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes);
+
+// ── API Routes ──────────────────────────────────────────────────────
+app.use('/api/auth',     authRoutes);
+app.use('/api/posts',    postRoutes);
 app.use('/api/comments', commentRoutes);
-app.use('/api/admin', adminRoutes);
-// ── Start Server ──────────────────────────────────────────────
+app.use('/api/admin',    adminRoutes);
+
+// ── Health check ────────────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.json({ message: 'Chess Unlocked API is running ✔' });
+});
+
+// ── Start Server ────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

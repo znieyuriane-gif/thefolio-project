@@ -1,5 +1,9 @@
 const dns = require('dns');
-dns.setServers(['8.8.8.8', '8.8.4.4']); // Force Google DNS
+
+// Force Google DNS only in development (fixes SRV resolution issues on Windows)
+if (process.env.NODE_ENV !== 'production') {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
+}
 
 const mongoose = require("mongoose");
 
@@ -12,5 +16,12 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await mongoose.connection.close();
+  console.log('🔌 MongoDB connection closed');
+  process.exit(0);
+});
 
 module.exports = connectDB;

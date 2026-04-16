@@ -29,9 +29,7 @@ const allowedOrigins = [
 // 2. Comprehensive CORS Configuration
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    
+    if (!origin) return callback(null, true); // Allow requests with no origin
     if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith(".vercel.app")) {
       callback(null, true);
     } else {
@@ -43,14 +41,14 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 
-// 3. Manual Preflight Handling (Fixes the "Wildcard" error on certain environments)
+// 3. Manual Preflight Handling
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin) || (origin && origin.endsWith(".vercel.app"))) {
     res.header("Access-Control-Allow-Origin", origin);
   }
   res.header("Access-Control-Allow-Credentials", "true");
-  
+
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -74,8 +72,18 @@ app.get('/', (req, res) => {
   res.json({ message: 'The folio API is Live ✔' });
 });
 
+// Optional: DB health check route
+app.get('/api/health', async (req, res) => {
+  try {
+    const state = mongoose.connection.readyState;
+    res.json({ dbState: state === 1 ? 'connected' : 'disconnected' });
+  } catch (err) {
+    res.status(500).json({ error: 'Health check failed', details: err.message });
+  }
+});
+
 // ── Start Server ────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

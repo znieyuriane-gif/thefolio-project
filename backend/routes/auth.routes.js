@@ -44,12 +44,16 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
+  console.log("Login request body:", req.body);
+
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required.' });
   }
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: req.body.email.toLowerCase() });
+    console.log("User found:", user);
+
     if (!user) return res.status(400).json({ message: 'Invalid email or password.' });
 
     if (user.status === 'inactive') {
@@ -57,6 +61,8 @@ router.post('/login', async (req, res) => {
     }
 
     const match = await user.matchPassword(password);
+    console.log("Password match result:", match);
+
     if (!match) return res.status(400).json({ message: 'Invalid email or password.' });
 
     res.json({
@@ -114,6 +120,8 @@ router.put('/change-password', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const match = await user.matchPassword(currentPassword);
+    console.log("Change password match result:", match);
+
     if (!match) return res.status(400).json({ message: 'Current password is incorrect.' });
 
     user.password = newPassword;

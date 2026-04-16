@@ -22,8 +22,8 @@ connectDB();
 // 1. Define allowed origins clearly
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://vercel.app",
-  "https://vercel.app"
+  "https://thefolio-project.vercel.app",
+  "https://thefolio-project-git-main-znieyuriane-gifs-projects.vercel.app"
 ];
 
 // 2. Comprehensive CORS Configuration

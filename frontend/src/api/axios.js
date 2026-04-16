@@ -1,8 +1,9 @@
 import axios from "axios";
 
+// Use environment variable for flexibility
 const API = axios.create({
-  baseURL: "https://thefolio-project-nrvr.onrender.com/api",
-  withCredentials: true
+  baseURL: process.env.REACT_APP_API_URL + "/api",
+  withCredentials: true,
 });
 
 // Attach token to every request automatically

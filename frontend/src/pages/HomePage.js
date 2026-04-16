@@ -16,9 +16,10 @@ import "../App.css";
 
 const HomePage = () => {
   const { user } = useAuth();
-  
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     API.get("/posts")
@@ -26,7 +27,6 @@ const HomePage = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  // MEMBER (own post) or ADMIN: delete post directly from home
   const handleDelete = async (postId, e) => {
     e.preventDefault();
     if (!window.confirm("Are you sure you want to delete this post?")) return;
@@ -43,7 +43,7 @@ const HomePage = () => {
       <Header />
       <hr className="hori" />
 
-      {/* Banner images */}
+      {/* Banner images (static imports) */}
       <div className="images">
         <img src={m1} alt="Manga 1" />
         <img src={m2} alt="Manga 2" />
@@ -69,32 +69,20 @@ const HomePage = () => {
       <section id="info">
         <div className="container">
           <h3>MANGA, MANHWA, and MANHUA</h3>
-          <p>
-            <span>M</span>anga, manhwa, and manhua are all types of comics from
-            different countries. Manga is Japanese and usually read right to
-            left, covering a wide range of genres like action, romance, and
-            fantasy. Manhwa is Korean, read left to right, often in digital
-            webtoon format, and commonly focuses on modern settings, romance,
-            and fantasy. Manhua comes from China, Taiwan, or Hong Kong, also
-            read left to right, and frequently features Chinese culture, martial
-            arts, historical themes, or modern stories.
-          </p>
+          <p>...</p>
         </div>
         <div id="con-below">
           <p>Below there's one example each, these are few of the books I've read.</p>
         </div>
       </section>
 
-      {/* Three Ms cards */}
+      {/* Three Ms cards (static imports) */}
       <div id="mmm-flex">
         <div className="the-mmm">
           <img src={potManga} className="img-border" alt="The Prince of Tennis" />
           <div className="text">
             <h4>The Prince of Tennis - Manga</h4>
-            <p><span>I</span>s a popular Japanese manga and anime series that follows the journey of tennis prodigy Ryoma Echizen as he competes with his school team, Seishun Academy, aiming for national championships.</p>
-            <p>Protagonist: Ryoma Echizen</p>
-            <p>Author/Artist: Takeshi Konomi</p>
-            <p>Published: 1999–2008</p>
+            <p>...</p>
           </div>
         </div>
 
@@ -102,11 +90,7 @@ const HomePage = () => {
           <img src={sololev} className="img-border" alt="Solo Leveling" />
           <div className="text">
             <h4>Solo Leveling - Manhwa</h4>
-            <p><span>I</span>s a popular South Korean web novel and webtoon that has been adapted into an anime series, following the journey of Sung Jinwoo, a weak hunter who gains the ability to level up beyond human limits.</p>
-            <p>Protagonist: Sung Jin-Woo</p>
-            <p>Author: Chugong</p>
-            <p>Artist: Dubu (Redice Studio)</p>
-            <p>Published: 2014 (novel), 2018–2021 (webtoon)</p>
+            <p>...</p>
           </div>
         </div>
 
@@ -114,11 +98,7 @@ const HomePage = () => {
           <img src={manhua} className="img-border" alt="The Real Daughter of The Qin Family" />
           <div className="text">
             <h4>The Real Daughter of The Qin Family - Manhua</h4>
-            <p><span>P</span>ei Yunge is the true daughter who seeks to reclaim her rightful place after being wronged by her family.</p>
-            <p>Protagonist: Pei Yunge</p>
-            <p>Author: Suxianning</p>
-            <p>Artist: Vigor Comic</p>
-            <p>Published: 2021–ongoing</p>
+            <p>...</p>
           </div>
         </div>
       </div>
@@ -167,7 +147,7 @@ const HomePage = () => {
                 <div key={post._id} className="post-card">
                   {post.image && (
                     <img
-                      src={`http://localhost:5000/uploads/${post.image}`}
+                      src={`${API_BASE_URL}/uploads/${post.image}`}
                       alt={post.title}
                     />
                   )}
@@ -177,21 +157,15 @@ const HomePage = () => {
                     By {post.author?.name} · {new Date(post.createdAt).toLocaleDateString()}
                   </small>
 
-                  {/* Post card action buttons */}
                   <div className="post-card-actions">
-                    {/* ALL: view post */}
                     <Link to={`/posts/${post._id}`} className="post-card-btn post-card-view">
                       👁 View
                     </Link>
-
-                    {/* MEMBER (own) or ADMIN: edit */}
                     {(isOwner || isAdmin) && (
                       <Link to={`/edit-post/${post._id}`} className="post-card-btn post-card-edit">
-                        ✏ Edit
+                        ✏️ Edit
                       </Link>
                     )}
-
-                    {/* MEMBER (own) or ADMIN: delete */}
                     {(isOwner || isAdmin) && (
                       <button
                         className="post-card-btn post-card-delete"

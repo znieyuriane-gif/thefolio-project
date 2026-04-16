@@ -19,8 +19,8 @@ connectDB();
 
 // ── Global Middleware ────────────────────────────────────────────────
 const allowedOrigins = [
-  'http://localhost:3000',              // dev
-  'https://thefolio-1ttk.vercel.app'    // production (Vercel)
+  'http://localhost:3000',               // dev
+  'https://thefolio-project.vercel.app', // production (Vercel)
 ];
 
 app.use(cors({
@@ -48,7 +48,7 @@ app.use('/api/contact',  contactRoutes); // <-- FIXED usage
 
 // ── Health check ────────────────────────────────────────────────────
 app.get('/', (req, res) => {
-  res.json({ message: 'Chess Unlocked API is running ✔' });
+  res.json({ message: 'The folio API is LIve✔' });
 });
 
 // ── Start Server ────────────────────────────────────────────────────

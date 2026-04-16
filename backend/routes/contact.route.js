@@ -2,6 +2,7 @@ const express = require("express");
 const Contact = require("../models/Contact"); // <-- Correct model import
 const router = express.Router();
 
+// POST /api/contact
 router.post("/", async (req, res) => {
   const { name, email, message } = req.body;
   try {

@@ -25,7 +25,7 @@ const allowedOrigins = [
   "https://thefolio-project.vercel.app",
   "https://thefolio-project-git-main-znieyuriane-gifs-projects.vercel.app"
 ];
-
+//yeh
 // 2. Comprehensive CORS Configuration
 app.use(cors({
   origin: function (origin, callback) {

@@ -12,6 +12,10 @@ function ContactPage() {
   const [emailError, setEmailError] = useState("");
   const [messageError, setMessageError] = useState("");
 
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
@@ -50,15 +54,18 @@ function ContactPage() {
       try {
         const response = await API.post("/contact", { name, email, message });
         if (response.data.success) {
-          alert("Message Sent Successfully!!!");
+          setModalMessage("Message Sent Successfully!!!");
+          setShowModal(true);
           setName("");
           setEmail("");
           setMessage("");
         } else {
-          alert("Failed to send message.");
+          setModalMessage("Failed to send message.");
+          setShowModal(true);
         }
       } catch (error) {
-        alert("Error sending message.");
+        setModalMessage("Error sending message.");
+        setShowModal(true);
         console.error(error);
       }
     }
@@ -146,11 +153,10 @@ function ContactPage() {
               </td>
               <td>
                 <p>
-                  <span>W</span>EBTOON is a free digital platform where you can read millions of comics, manga, and manhwa episodes across diverse genres like romance, action, thriller, and fantasy. It's one of the world's largest webcomic communities, with both fans and creators contributing stories.
+                  <span>W</span>EBTOON is a free digital platform where you can read millions of comics, manga, and manhwa episodes across diverse genres like romance, action, thriller, and fantasy.
                 </p>
               </td>
             </tr>
-
             <tr>
               <td>
                 <p>Website/App</p>
@@ -162,11 +168,10 @@ function ContactPage() {
               </td>
               <td>
                 <p>
-                  <span>M</span>angaToon is a free mobile app for reading comics, manga, manhua (Chinese comics), and manhwa (Korean comics), offering colorful stories across genres like romance, action, fantasy, BL, comedy, and horror.
+                  <span>M</span>angaToon is a free mobile app for reading comics, manga, manhua, and manhwa, offering colorful stories across genres like romance, action, fantasy, BL, comedy, and horror.
                 </p>
               </td>
             </tr>
-
             <tr>
               <td>
                 <p>Book</p>
@@ -182,7 +187,6 @@ function ContactPage() {
                 </p>
               </td>
             </tr>
-
             <tr>
               <td>
                 <p>Book</p>
@@ -204,8 +208,6 @@ function ContactPage() {
 
       <br />
       <hr className="hori" />
-
-      <br />
 
       <div id="text2">
         <p>MAP</p>
@@ -229,6 +231,25 @@ function ContactPage() {
       </div>
 
       <br />
+
+      {/* Modal inline */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Notification</h3>
+            <p>{modalMessage}</p>
+            <div className="modal-buttons">
+              <button
+                className="modal-btn-cancel"
+                onClick={() => setShowModal(false)}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

@@ -1,4 +1,6 @@
 require('dotenv').config(); // ← Must be FIRST
+import contactRoutes from "./routes/contact.route.js";
+
 
 const express   = require('express');
 const cors      = require('cors');
@@ -43,6 +45,8 @@ app.use('/api/auth',     authRoutes);
 app.use('/api/posts',    postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/admin',    adminRoutes);
+app.use("/contact", contactRoutes);
+
 
 // ── Health check ────────────────────────────────────────────────────
 app.get('/', (req, res) => {

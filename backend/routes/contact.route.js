@@ -3,7 +3,7 @@ import express from "express";
 const router = express.Router();
 
 // Example MongoDB model
-import Contact from "../models/Contact.js";
+import Contact from "../pages/ContactPage.js";
 
 router.post("/", async (req, res) => {
   const { name, email, message } = req.body;

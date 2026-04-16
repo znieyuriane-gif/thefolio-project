@@ -17,6 +17,8 @@ const PostPage = () => {
   const [error, setError] = useState("");
   const [commentErr, setCommentErr] = useState("");
 
+  const STORAGE_URL = process.env.REACT_APP_API_URL.replace("/api", "");
+
   useEffect(() => {
     Promise.all([API.get(`/posts/${id}`), API.get(`/comments/${id}`)])
       .then(([postRes, commentRes]) => {
@@ -27,7 +29,6 @@ const PostPage = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // MEMBER or ADMIN: add comment
   const handleAddComment = async () => {
     if (!commentBody.trim()) { setCommentErr("Comment cannot be empty."); return; }
     setCommentErr("");
@@ -40,7 +41,6 @@ const PostPage = () => {
     }
   };
 
-  // MEMBER (own comment) or ADMIN: delete comment
   const handleDeleteComment = async (commentId) => {
     try {
       await API.delete(`/comments/${commentId}`);
@@ -50,7 +50,6 @@ const PostPage = () => {
     }
   };
 
-  // MEMBER (own post) or ADMIN: delete post
   const handleDeletePost = async () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
@@ -64,8 +63,8 @@ const PostPage = () => {
   if (loading) return <><Header /><main className="container"><p style={{ padding: "3rem", fontStyle: "italic" }}>Loading post...</p></main><Footer /></>;
   if (error)   return <><Header /><main className="container"><p className="error-msg" style={{ padding: "2rem" }}>{error}</p></main><Footer /></>;
 
-  const isOwner        = user && post.author?._id === user._id;
-  const isAdmin        = user?.role === "admin";
+  const isOwner         = user && post.author?._id === user._id;
+  const isAdmin         = user?.role === "admin";
   const isMemberOrAdmin = user && (user.role === "member" || user.role === "admin");
 
   return (
@@ -73,22 +72,26 @@ const PostPage = () => {
       <Header />
       <main className="container">
 
-        {/* Post Content — GUEST, MEMBER, ADMIN: all can read */}
+        {/* Post Content */}
         <article className="card-warm" style={{ marginBottom: "30px" }}>
+
+          {/* ✅ Post image at the top */}
           {post.image && (
             <img
-              src={`http://localhost:5000/uploads/${post.image}`}
+              src={`${STORAGE_URL}/uploads/${post.image}`}
               alt={post.title}
               style={{ width: "100%", maxHeight: 360, objectFit: "cover", borderRadius: "8px", margin: "0 0 20px" }}
             />
           )}
 
+          {/* ✅ Title directly below image */}
           <h2 style={{ fontFamily: "'Cinzel', serif", marginBottom: "10px" }}>{post.title}</h2>
 
+          {/* ✅ Author info below title */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px", color: "#6E3482", fontSize: "0.88rem" }}>
             {post.author?.profilePic && (
               <img
-                src={`http://localhost:5000/uploads/${post.author.profilePic}`}
+                src={`${STORAGE_URL}/uploads/${post.author.profilePic}`}
                 alt=""
                 style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", margin: 0 }}
               />
@@ -100,7 +103,6 @@ const PostPage = () => {
 
           <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.8 }}>{post.body}</div>
 
-          {/* MEMBER (own post) or ADMIN: edit & delete buttons */}
           {(isOwner || isAdmin) && (
             <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
               <Link
@@ -139,7 +141,7 @@ const PostPage = () => {
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.88rem", color: "#6E3482" }}>
                   {comment.author?.profilePic && (
                     <img
-                      src={`http://localhost:5000/uploads/${comment.author.profilePic}`}
+                      src={`${STORAGE_URL}/uploads/${comment.author.profilePic}`}
                       alt=""
                       style={{ width: 24, height: 24, borderRadius: "50%", objectFit: "cover", margin: 0 }}
                     />
@@ -148,7 +150,6 @@ const PostPage = () => {
                   <span>· {new Date(comment.createdAt).toLocaleDateString()}</span>
                 </div>
 
-                {/* MEMBER (own comment) or ADMIN: delete comment */}
                 {user && (user._id === comment.author?._id || isAdmin) && (
                   <button
                     onClick={() => handleDeleteComment(comment._id)}
@@ -162,7 +163,6 @@ const PostPage = () => {
             </div>
           ))}
 
-          {/* MEMBER or ADMIN: comment box */}
           {isMemberOrAdmin ? (
             <div style={{ marginTop: "16px" }}>
               <label style={{ fontFamily: "'Cinzel', serif", fontSize: "0.85rem", fontWeight: 700 }}>
@@ -182,7 +182,6 @@ const PostPage = () => {
               </button>
             </div>
           ) : (
-            // GUEST: read comments only, prompted to login
             <p style={{ marginTop: "16px", fontStyle: "italic", color: "#6E3482" }}>
               <Link to="/login">Login</Link> or <Link to="/register">Register</Link> to leave a comment.
             </p>

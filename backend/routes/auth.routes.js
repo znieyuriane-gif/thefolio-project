@@ -1,18 +1,19 @@
-// backend/routes/auth.routes.js
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload');
+
 const router = express.Router();
 
-const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+// ── Utility: Generate JWT ───────────────────────────────────────────
+const generateToken = (id) => 
+  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-// ── POST /api/auth/register ───────────────────────────────────
+// ── POST /api/auth/register ─────────────────────────────────────────
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
-  // FIX: validate required fields exist before hitting the DB
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'Name, email, and password are required.' });
   }
@@ -25,7 +26,6 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({
       token: generateToken(user._id),
-      // FIX: include all fields the frontend AuthContext needs
       user: {
         _id: user._id,
         name: user.name,
@@ -35,13 +35,12 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (err) {
-    // FIX: return the actual error message so you can see what went wrong
     console.error('Register error:', err.message);
     res.status(500).json({ message: err.message });
   }
 });
 
-// ── POST /api/auth/login ──────────────────────────────────────
+// ── POST /api/auth/login ────────────────────────────────────────────
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -53,8 +52,9 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid email or password.' });
 
-    if (user.status === 'inactive')
+    if (user.status === 'inactive') {
       return res.status(403).json({ message: 'Your account is deactivated. Please contact the admin.' });
+    }
 
     const match = await user.matchPassword(password);
     if (!match) return res.status(400).json({ message: 'Invalid email or password.' });
@@ -75,19 +75,25 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// ── GET /api/auth/me ──────────────────────────────────────────
+// ── GET /api/auth/me ────────────────────────────────────────────────
 router.get('/me', protect, async (req, res) => {
-  const user = await User.findById(req.user._id).select('-password');
-  res.json(user);
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error('Fetch user error:', err.message);
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// ── PUT /api/auth/profile ─────────────────────────────────────
+// ── PUT /api/auth/profile ───────────────────────────────────────────
 router.put('/profile', protect, upload.single('profilePic'), async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (req.body.name) user.name = req.body.name;
     if (req.body.bio)  user.bio  = req.body.bio;
     if (req.file)      user.profilePic = req.file.filename;
+
     await user.save();
     const updated = await User.findById(user._id).select('-password');
     res.json(updated);
@@ -97,13 +103,19 @@ router.put('/profile', protect, upload.single('profilePic'), async (req, res) =>
   }
 });
 
-// ── PUT /api/auth/change-password ────────────────────────────
+// ── PUT /api/auth/change-password ──────────────────────────────────
 router.put('/change-password', protect, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ message: 'Both current and new password are required.' });
+  }
+
   try {
     const user = await User.findById(req.user._id);
     const match = await user.matchPassword(currentPassword);
     if (!match) return res.status(400).json({ message: 'Current password is incorrect.' });
+
     user.password = newPassword;
     await user.save();
     res.json({ message: 'Password updated successfully.' });

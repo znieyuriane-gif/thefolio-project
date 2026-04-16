@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://thefolio-project-nrvr.onrender.com/api",
+  withCredentials: true
 });
 
 // Attach token to every request automatically

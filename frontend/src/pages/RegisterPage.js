@@ -146,34 +146,7 @@ function RegisterPage() {
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
             <span className="error">{errors.confirmPassword}</span>
           </div>
-
-          <div className="terms-group">
-            <label className="terms-label">
-              <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} />
-              <p>I Agree to the Terms</p>
-            </label>
-            <span className="error1">{errors.terms}</span>
-          </div>
-
-          <div className="category-section">
-            <p>What Category Are You Interested?</p>
-          </div>
-          <div className="category-group">
-            <label>
-              <input type="radio" name="category" value="manga" checked={category === "manga"} onChange={(e) => setCategory(e.target.value)} />
-              Manga
-            </label>
-            <label>
-              <input type="radio" name="category" value="manhwa" checked={category === "manhwa"} onChange={(e) => setCategory(e.target.value)} />
-              Manhwa
-            </label>
-            <label>
-              <input type="radio" name="category" value="manhua" checked={category === "manhua"} onChange={(e) => setCategory(e.target.value)} />
-              Manhua
-            </label>
-          </div>
-          <span className="error1">{errors.category}</span>
-
+          
           <button type="submit" className="button">Register</button>
         </form>
       </div>

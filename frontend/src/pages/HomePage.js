@@ -70,10 +70,13 @@ const HomePage = () => {
         <div className="container">
           <h3>MANGA, MANHWA, and MANHUA</h3>
           <p>
-            Manga, manhwa, and manhua are all types of comics from different countries.
-            Manga is Japanese and usually read right to left, covering a wide range of genres.
-            Manhwa is Korean, read left to right, often in digital webtoon format.
-            Manhua comes from China, Taiwan, or Hong Kong, also read left to right.
+            Manga, Manhwa, and Manhua are three distinct comic traditions from Japan,
+            Korea, and China. Each has its own cultural roots, storytelling style,
+            and reading format. Manga is traditionally black-and-white and serialized
+            in magazines, Manhwa often appears as colorful webtoons optimized for
+            mobile reading, and Manhua blends traditional Chinese art with modern
+            narratives. Together, they represent diverse storytelling that has
+            influenced readers worldwide.
           </p>
         </div>
         <div id="con-below">
@@ -87,7 +90,12 @@ const HomePage = () => {
           <img src={potManga} className="img-border" alt="The Prince of Tennis" />
           <div className="text">
             <h4>The Prince of Tennis - Manga</h4>
-            <p>Popular Japanese manga following tennis prodigy Ryoma Echizen.</p>
+            <p>
+              A Japanese manga following tennis prodigy Ryoma Echizen as he joins
+              Seishun Academy and faces rivals on his journey to become the best.
+              It’s a classic sports manga that inspired anime adaptations and
+              countless fans.
+            </p>
           </div>
         </div>
 
@@ -95,7 +103,12 @@ const HomePage = () => {
           <img src={sololev} className="img-border" alt="Solo Leveling" />
           <div className="text">
             <h4>Solo Leveling - Manhwa</h4>
-            <p>South Korean webtoon about Sung Jinwoo, a hunter who levels up beyond human limits.</p>
+            <p>
+              A South Korean webtoon about Sung Jinwoo, the weakest hunter who
+              gains a mysterious ability to level up infinitely. Its mix of action,
+              fantasy, and RPG mechanics made it one of the most popular manhwa
+              worldwide.
+            </p>
           </div>
         </div>
 
@@ -103,7 +116,12 @@ const HomePage = () => {
           <img src={manhua} className="img-border" alt="The Real Daughter of The Qin Family" />
           <div className="text">
             <h4>The Real Daughter of The Qin Family - Manhua</h4>
-            <p>Pei Yunge reclaims her rightful place after being wronged by her family.</p>
+            <p>
+              A Chinese manhua about Pei Yunge, who reclaims her rightful place
+              after being wronged by her family. It blends drama, romance, and
+              themes of resilience, showcasing the unique storytelling style of
+              manhua.
+            </p>
           </div>
         </div>
       </div>
@@ -114,16 +132,16 @@ const HomePage = () => {
         <img src={queen} alt="butterfly" className="img-highlights" />
         <div className="highlights-txt">
           <ul>
-            <li>Diverse Story Telling</li>
-            <li>Digital Platform Accessibility</li>
-            <li>Cultural Origins</li>
-            <li>Unique Reading Formats</li>
+            <li>Diverse Storytelling across cultures</li>
+            <li>Accessible on digital platforms</li>
+            <li>Rich cultural origins and traditions</li>
+            <li>Unique reading formats (manga right-to-left, manhwa/manhua left-to-right)</li>
           </ul>
         </div>
       </section>
 
       <hr className="hori" />
-      <br></br>
+
       {/* Latest Posts */}
       <div className="home-page">
         <div className="posts-header">

@@ -12,6 +12,9 @@ function ContactPage() {
   const [emailError, setEmailError] = useState("");
   const [messageError, setMessageError] = useState("");
 
+  // Success message state
+  const [successMessage, setSuccessMessage] = useState("");
+
   // Modal state
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -26,6 +29,7 @@ function ContactPage() {
     setNameError("");
     setEmailError("");
     setMessageError("");
+    setSuccessMessage("");
 
     let valid = true;
 
@@ -54,6 +58,7 @@ function ContactPage() {
       try {
         const response = await API.post("/contact", { name, email, message });
         if (response.data.success) {
+          setSuccessMessage("Message Sent Successfully!!!"); // ✅ inline success
           setModalMessage("Message Sent Successfully!!!");
           setShowModal(true);
           setName("");
@@ -80,6 +85,11 @@ function ContactPage() {
       </div>
 
       <hr className="hori" />
+
+      {/* ✅ Success message above the container */}
+      {successMessage && (
+        <div className="success-msg">{successMessage}</div>
+      )}
 
       <div className="cont">
         <p>CONTACT FORM</p>

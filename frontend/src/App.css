@@ -1437,6 +1437,20 @@ blockquote {
 [data-theme="dark"] .cont input,
 [data-theme="dark"] .cont textarea { background-color: #6E3482; color: #F5EBFA; border-color: #A56ABD; }
 
+.error {
+  color: #c0392b;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+.success-msg {
+  color: #27ae60;
+  text-align: center;
+  margin: 12px auto;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+
 /* ── LOGOUT BUTTON (in header nav) ── */
 .logout-btn {
   font-size: 18px;

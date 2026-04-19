@@ -19,7 +19,7 @@ const HomePage = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL.replace("/api", "");
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     API.get("/posts")
@@ -56,7 +56,8 @@ const HomePage = () => {
         <p>
           <span>W</span>elcome to my webpage, this page will introduce what saved
           my life and these are what I call "The Three Ms" which means Manga,
-          Manhwa, and Manhua.
+          Manhwa, and Manhua. These are something that I will be keeping and
+          doing my entire life.
         </p>
       </section>
 
@@ -68,7 +69,12 @@ const HomePage = () => {
       <section id="info">
         <div className="container">
           <h3>MANGA, MANHWA, and MANHUA</h3>
-          <p>...</p>
+          <p>
+            Manga, manhwa, and manhua are all types of comics from different countries.
+            Manga is Japanese and usually read right to left, covering a wide range of genres.
+            Manhwa is Korean, read left to right, often in digital webtoon format.
+            Manhua comes from China, Taiwan, or Hong Kong, also read left to right.
+          </p>
         </div>
         <div id="con-below">
           <p>Below there's one example each, these are few of the books I've read.</p>
@@ -81,7 +87,7 @@ const HomePage = () => {
           <img src={potManga} className="img-border" alt="The Prince of Tennis" />
           <div className="text">
             <h4>The Prince of Tennis - Manga</h4>
-            <p>...</p>
+            <p>Popular Japanese manga following tennis prodigy Ryoma Echizen.</p>
           </div>
         </div>
 
@@ -89,7 +95,7 @@ const HomePage = () => {
           <img src={sololev} className="img-border" alt="Solo Leveling" />
           <div className="text">
             <h4>Solo Leveling - Manhwa</h4>
-            <p>...</p>
+            <p>South Korean webtoon about Sung Jinwoo, a hunter who levels up beyond human limits.</p>
           </div>
         </div>
 
@@ -97,7 +103,7 @@ const HomePage = () => {
           <img src={manhua} className="img-border" alt="The Real Daughter of The Qin Family" />
           <div className="text">
             <h4>The Real Daughter of The Qin Family - Manhua</h4>
-            <p>...</p>
+            <p>Pei Yunge reclaims her rightful place after being wronged by her family.</p>
           </div>
         </div>
       </div>
@@ -117,7 +123,7 @@ const HomePage = () => {
       </section>
 
       <hr className="hori" />
-
+      <br></br>
       {/* Latest Posts */}
       <div className="home-page">
         <div className="posts-header">
@@ -162,7 +168,7 @@ const HomePage = () => {
                     </Link>
                     {(isOwner || isAdmin) && (
                       <Link to={`/edit-post/${post._id}`} className="post-card-btn post-card-edit">
-                        ✏️ Edit
+                        ✏ Edit
                       </Link>
                     )}
                     {(isOwner || isAdmin) && (

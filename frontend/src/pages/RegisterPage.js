@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../api/axios";
@@ -13,12 +12,13 @@ import bomtoom from "../images/bomtoom.jpg";
 
 function RegisterPage() {
   const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
+  const [date, setDate] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [modal, setModal] = useState({ show: false, message: "", success: false });
 
   function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -26,36 +26,27 @@ function RegisterPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setErrorMsg("");
-    setSuccessMsg("");
     let newErrors = {};
     let isValid = true;
 
-    if (fullname.trim() === "") {
-      newErrors.fullname = "Full name is required";
-      isValid = false;
+    if (fullname.trim() === "") { newErrors.fullname = "Fullname is required"; isValid = false; }
+    if (username.trim() === "") { newErrors.username = "Username is required"; isValid = false; }
+    if (date === "") {
+      newErrors.date = "Date of birth is required"; isValid = false;
+    } else {
+      let birthDate = new Date(date);
+      let today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      let monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+      if (age < 18) { newErrors.date = "You must be at least 18 years old"; isValid = false; }
     }
-    if (email.trim() === "") {
-      newErrors.email = "Email is required";
-      isValid = false;
-    } else if (!isValidEmail(email)) {
-      newErrors.email = "Invalid email format";
-      isValid = false;
-    }
-    if (password === "") {
-      newErrors.password = "Password is required";
-      isValid = false;
-    } else if (password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-      isValid = false;
-    }
-    if (confirmPassword === "") {
-      newErrors.confirmPassword = "Please confirm your password";
-      isValid = false;
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-      isValid = false;
-    }
+    if (email.trim() === "") { newErrors.email = "Email is required"; isValid = false; }
+    else if (!isValidEmail(email)) { newErrors.email = "Invalid email format"; isValid = false; }
+    if (password === "") { newErrors.password = "Password is required"; isValid = false; }
+    else if (password.length < 8) { newErrors.password = "Password must be at least 8 characters"; isValid = false; }
+    if (confirmPassword === "") { newErrors.confirmPassword = "Confirm password is required"; isValid = false; }
+    else if (password !== confirmPassword) { newErrors.confirmPassword = "Passwords do not match"; isValid = false; }
 
     setErrors(newErrors);
     if (!isValid) return;
@@ -68,24 +59,53 @@ function RegisterPage() {
       });
 
       setFullname("");
+      setUsername("");
+      setDate("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
       setErrors({});
 
-      setSuccessMsg("Registration successful! You can now login.");
+      setModal({ show: true, message: "Registration Successful!!!", success: true });
     } catch (err) {
       console.error("Register error:", err.response?.data);
-      setErrorMsg(
-        err.response?.data?.message || "Registration failed. Please try again."
-      );
+      setModal({
+        show: true,
+        message: err.response?.data?.message || "Registration failed. Please try again.",
+        success: false,
+      });
     }
+  }
+
+  function closeModal() {
+    setModal({ show: false, message: "", success: false });
   }
 
   return (
     <div>
       <Header />
       <hr className="hori" />
+
+      {/* MODAL */}
+      {modal.show && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Notification</h3>
+            <p>{modal.message}</p>
+            {modal.success ? (
+              <div className="modal-buttons">
+                <Link to="/login">
+                  <button className="modal-btn-cancel">Go to Login</button>
+                </Link>
+              </div>
+            ) : (
+              <div className="modal-buttons">
+                <button className="modal-btn-cancel" onClick={closeModal}>OK</button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="sign-up">
         <h2>SIGN UP!</h2>
@@ -98,22 +118,23 @@ function RegisterPage() {
       </div>
 
       <div className="regi-con">
-        {errorMsg && (
-          <p className="error-msg" style={{ textAlign: "center", marginBottom: "10px" }}>
-            {errorMsg}
-          </p>
-        )}
-        {successMsg && (
-          <p style={{ textAlign: "center", marginBottom: "10px", color: "#27ae60", fontWeight: "bold" }}>
-            {successMsg} <Link to="/login">Click here to Login</Link>
-          </p>
-        )}
-
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Full Name: </label>
+            <label>Fullname: </label>
             <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} />
             <span className="error">{errors.fullname}</span>
+          </div>
+
+          <div>
+            <label>Username: </label>
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <span className="error">{errors.username}</span>
+          </div>
+
+          <div>
+            <label>Date of Birth: </label>
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <span className="error">{errors.date}</span>
           </div>
 
           <div>
@@ -123,13 +144,13 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label>Password: </label>
+            <label>Password:</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <span className="error">{errors.password}</span>
           </div>
 
           <div>
-            <label>Confirm Password: </label>
+            <label>Confirm Password:</label>
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
             <span className="error">{errors.confirmPassword}</span>
           </div>

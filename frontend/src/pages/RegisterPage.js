@@ -1,3 +1,4 @@
+```jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../api/axios";
@@ -12,13 +13,9 @@ import bomtoom from "../images/bomtoom.jpg";
 
 function RegisterPage() {
   const [fullname, setFullname] = useState("");
-  const [username, setUsername] = useState("");
-  const [date, setDate] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [terms, setTerms] = useState(false);
-  const [category, setCategory] = useState("");
   const [errors, setErrors] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -34,26 +31,31 @@ function RegisterPage() {
     let newErrors = {};
     let isValid = true;
 
-    if (fullname.trim() === "") { newErrors.fullname = "Fullname is required"; isValid = false; }
-    if (username.trim() === "") { newErrors.username = "Username is required"; isValid = false; }
-    if (date === "") {
-      newErrors.date = "Date of birth is required"; isValid = false;
-    } else {
-      let birthDate = new Date(date);
-      let today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      let monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
-      if (age < 18) { newErrors.date = "You must be at least 18 years old"; isValid = false; }
+    if (fullname.trim() === "") {
+      newErrors.fullname = "Full name is required";
+      isValid = false;
     }
-    if (email.trim() === "") { newErrors.email = "Email is required"; isValid = false; }
-    else if (!isValidEmail(email)) { newErrors.email = "Invalid email format"; isValid = false; }
-    if (password === "") { newErrors.password = "Password is required"; isValid = false; }
-    else if (password.length < 8) { newErrors.password = "Password must be at least 8 characters"; isValid = false; }
-    if (confirmPassword === "") { newErrors.confirmPassword = "Confirm password is required"; isValid = false; }
-    else if (password !== confirmPassword) { newErrors.confirmPassword = "Passwords do not match"; isValid = false; }
-    if (!terms) { newErrors.terms = "You must agree to the terms"; isValid = false; }
-    if (!category) { newErrors.category = "Please select a category"; isValid = false; }
+    if (email.trim() === "") {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      newErrors.email = "Invalid email format";
+      isValid = false;
+    }
+    if (password === "") {
+      newErrors.password = "Password is required";
+      isValid = false;
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+      isValid = false;
+    }
+    if (confirmPassword === "") {
+      newErrors.confirmPassword = "Please confirm your password";
+      isValid = false;
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+      isValid = false;
+    }
 
     setErrors(newErrors);
     if (!isValid) return;
@@ -65,21 +67,18 @@ function RegisterPage() {
         password,
       });
 
-      // Clear all fields
       setFullname("");
-      setUsername("");
-      setDate("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-      setTerms(false);
-      setCategory("");
       setErrors({});
 
-      // Stay on page — show success with link to login
       setSuccessMsg("Registration successful! You can now login.");
     } catch (err) {
-      setErrorMsg(err.response?.data?.message || "Registration failed. Please try again.");
+      console.error("Register error:", err.response?.data);
+      setErrorMsg(
+        err.response?.data?.message || "Registration failed. Please try again."
+      );
     }
   }
 
@@ -112,21 +111,9 @@ function RegisterPage() {
 
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Fullname: </label>
+            <label>Full Name: </label>
             <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} />
             <span className="error">{errors.fullname}</span>
-          </div>
-
-          <div>
-            <label>Username: </label>
-            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <span className="error">{errors.username}</span>
-          </div>
-
-          <div>
-            <label>Date of Birth: </label>
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-            <span className="error">{errors.date}</span>
           </div>
 
           <div>
@@ -136,17 +123,17 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label>Password:</label>
+            <label>Password: </label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <span className="error">{errors.password}</span>
           </div>
 
           <div>
-            <label>Confirm Password:</label>
+            <label>Confirm Password: </label>
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
             <span className="error">{errors.confirmPassword}</span>
           </div>
-          
+
           <button type="submit" className="button">Register</button>
         </form>
       </div>
@@ -171,3 +158,4 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
+```
